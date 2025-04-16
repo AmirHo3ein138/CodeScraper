@@ -8,7 +8,7 @@ import time
 url = r"https://www.alibaba.ir/accommodation/search?destination=province-gilan&title=%D8%A7%D8%B3%D8%AA%D8%A7%D9%86+%DA%AF%DB%8C%D9%84%D8%A7%D9%86&checkin=1404-01-30&checkout=1404-01-31&count=5&accommodationTypes=villa"
 
 options = Options()
-options.add_argument("--headless")
+# options.add_argument("--headless")
 options.add_argument("--disable-gpu")
 options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64)")
 driver = webdriver.Chrome(options=options)
@@ -18,7 +18,13 @@ print("waiting for 10 seconds...")
 time.sleep(10)
     
 
+print("Waiting for villas to load...")
 html = driver.page_source
+with open("page.html", "w", encoding="utf-8") as f:
+    f.write(html)
+    
+print("HTML saved. Please inspect page.html for debugging.")
+
 soup = BeautifulSoup(html, "lxml")
 
 villas = soup.find_all("li", class_="a-card mb-4 last:mb-0 cards-flip-item available-card")
@@ -36,5 +42,6 @@ for villa in villas:
         f.write(f"Villa Name is: {villa_name}\n")
         f.write(f"Villa Price for Every Night is: {villa_price}\n")
         f.write(f"Villa Basic Information is: {villa_place_info}\n")
-        f.write(50*"===")
-    print(f"{count} Numbers of ADs Screaped.")
+        f.write(50*"==="+ "\n\n")
+print(f"{count} Numbers of ADs Screaped.")
+driver.quit()

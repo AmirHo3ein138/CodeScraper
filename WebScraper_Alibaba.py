@@ -37,4 +37,4 @@ for villa in villas:
         f.write(f"Villa Price for Every Night is: {villa_price}\n")
         f.write(f"Villa Basic Information is: {villa_place_info}\n")
         f.write(50*"===")
-        print(f"{count} Numbers of ADs Screaped.")
+    print(f"{count} Numbers of ADs Screaped.")

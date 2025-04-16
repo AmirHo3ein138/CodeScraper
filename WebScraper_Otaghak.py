@@ -46,13 +46,15 @@ for linkdata in villa_more_info_links:
 
     html = driver.page_source
     soup2 = BeautifulSoup(html, "lxml")
-
+    
     driver.quit()
+    price_every_night = soup2.find("h4", class_="Typography_subtitle2__Ba9_x text-Asphalt ")
     structure_info = soup2.find_all("div", class_="flex flex-col gap-1 md:gap-2 p-4", id="AboutRoom")
     with open("data.txt", "a", encoding="utf-8") as f: # You can change the directory here
       for tag in structure_info:
-          f.write(villa_name.text+ "\n")
-          f.write("\t"+tag.get_text(strip=True)+"\n")
-          f.write(linkdata + "\n")
+          f.write("Villa Name:  "+villa_name.text+"\n")
+          f.write("Every Night Price is:  "+str(price_every_night)+"\n")
+          f.write("All Information:  "+tag.get_text(strip=True)+"\n")
+          f.write("More Info In:  "+linkdata+"\n")
           print(50 * "==")
     count += 1

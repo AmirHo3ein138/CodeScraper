@@ -17,13 +17,11 @@ driver.get(url)
 print("waiting for 10 seconds...")
 time.sleep(10)
     
-
-print("Waiting for villas to load...")
 html = driver.page_source
-with open("page.html", "w", encoding="utf-8") as f:
-    f.write(html)
-    
-print("HTML saved. Please inspect page.html for debugging.")
+# print("Waiting for villas to load...")
+# with open("page.html", "w", encoding="utf-8") as f:
+#     f.write(html)  
+# print("HTML saved. For Debuging.")
 
 soup = BeautifulSoup(html, "lxml")
 

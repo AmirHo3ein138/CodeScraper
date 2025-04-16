@@ -13,15 +13,17 @@ options.add_argument("--disable-gpu")
 options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64)")
 driver = webdriver.Chrome(options=options)
 driver.get(url)
+for _ in range(50):
+    driver.execute_script("window.scrollTo(0, document.body.scrollHeight);") # Scrolling Down To Load More ADs
     #waiting to load the HTML file
-print("waiting for 10 seconds...")
-time.sleep(10)
+print("waiting for 20 seconds... \n Scrolling Down to Load More ADs")
+time.sleep(20)
     
 html = driver.page_source
 # print("Waiting for villas to load...")
 # with open("page.html", "w", encoding="utf-8") as f:
-#     f.write(html)  
-# print("HTML saved. For Debuging.")
+#     f.write(html)
+# print("HTML saved. Please inspect page.html for debugging.")
 
 soup = BeautifulSoup(html, "lxml")
 
@@ -41,5 +43,5 @@ for villa in villas:
         f.write(f"Villa Price for Every Night is: {villa_price}\n")
         f.write(f"Villa Basic Information is: {villa_place_info}\n")
         f.write(50*"==="+ "\n\n")
-print(f"{count} Numbers of ADs Screaped.")
+print(f"{count} Numbers of ADs Scraped.")
 driver.quit()

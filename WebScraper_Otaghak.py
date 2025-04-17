@@ -15,6 +15,7 @@ HEADERS = {
 
 }
 pn = int(input("Enter the page numbers to Scrape: "))
+codts = int(input("How many Ads you want to Scrap?  "))
 for page in range(1,pn+1):
     url = f"https://www.otaghak.com/province/gilan/?page={page}"
     baseSiteLink = requests.get(url, headers=HEADERS)
@@ -30,7 +31,7 @@ for page in range(1,pn+1):
         villa_more_info_links.append(moreInfo)
     # set a counter to count number of advertisements
     count = 0
-    codts = int(input("How many Ads you want to Scrap?  "))
+    
     for linkdata in villa_more_info_links:
         
         if count == codts:

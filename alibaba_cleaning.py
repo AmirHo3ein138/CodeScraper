@@ -1,22 +1,33 @@
 import re
 
 def cleaning(villa_info):
-  pass
-  # Villa Name
-  ...
+    data = {}
+  
+    # Villa Name
+    match = re.search(r"Villa Name:\s*(.*)", raw_text)
+    data['name'] = match.group(1).strip() if match else ""
 
-  # Price
-  ...
+    # Price
+    match = re.search(r"Villa Price:\s*([\d,]+)", raw_text)
+    data['price_per_night'] = int(match.group(1).replace(',', '')) if match else 0
 
-  # Features
-  ...
+    # Features
+    match = re.search(r"Functionality:\s*(.*?)Headers:", raw_text, re.DOTALL)
+    if match:
+        functionalities = match.group(1).strip().split(',')
+        data['features'] = [f.strip() for f in functionalities if f.strip()]
+    else:
+        data['features'] = []
 
-  # Headers
-  ...
+    # Headers
+    match = re.search(r"Headers:\s*(.*?)Villa Info:", raw_text, re.DOTALL)
+    data['headers'] = match.group(1).strip() if match else ""
 
-  # Description
-  ...
+    # Description
+    match = re.search(r"Villa Info:\s*(.*?)(={5,}|$)", raw_text, re.DOTALL)
+    data['description'] = match.group(1).strip() if match else ""
 
+    return data
 
 
 # example:

@@ -26,11 +26,11 @@ def fetch_api_data():
             },
             "date": {
                 "startTime": {
-                    "seconds": 1746390600,
+                    "seconds": 1748809800,
                     "nanos": 0
                 },
                 "endTime": {
-                    "seconds": 1746477000,
+                    "seconds": 1749069000,
                     "nanos": 0
                 }
             },
@@ -81,7 +81,7 @@ def scrape_villas():
     driver = webdriver.Chrome(options=options)
 
 
-    url = r"https://www.alibaba.ir/accommodation/search?title=%D8%A7%D8%AC%D8%A7%D8%B1%D9%87+%D9%88%DB%8C%D9%84%D8%A7+%D9%88+%D8%B3%D9%88%D8%A6%DB%8C%D8%AA+%D8%AF%D8%B1+%DA%AF%DB%8C%D9%84%D8%A7%D9%86&checkin=1404-02-15&checkout=1404-02-16&count=5&destination=province-gilan"
+    url = r"https://www.alibaba.ir/accommodation/search?destination=province-gilan&title=%D8%A7%D8%B3%D8%AA%D8%A7%D9%86+%DA%AF%DB%8C%D9%84%D8%A7%D9%86&checkin=1404-03-12&checkout=1404-03-15&count=3&accommodationTypes=villa"
     driver.get(url)
     scroll = int(input("Scroll Number: "))
     sleep_time = int(input("Sleep Time: "))
@@ -104,6 +104,7 @@ def scrape_villas():
         count += 1
         villa_name = villa.find("div", class_="available-card__title").text
         villa_price = villa.find("strong", class_="text-6 text-secondary-400").text
+        
         villa_place_info = villa.find("div", class_="available-card__meta__item").text
         with open("data_Alibaba.txt", "a", encoding="utf-8") as f:
             f.write(f"Villa Name is: {villa_name}\n")
@@ -148,11 +149,17 @@ def scrape_links_from_codes():
         villa_functionality = soup.find_all("div", class_="hotel-facility")
         villa_header = soup.find_all("div", class_="header-item")
         villa_content = soup.find("div", class_="text-content")
+        villa_owner = soup.find("div", class_="text-3 font-bold")
 
         if villaa_name:
             villaa_name = villaa_name.text.strip()
         else:
             villaa_name = "N/A"
+
+        if villa_owner:
+            villa_owner = villa_owner.text.strip()
+        else:
+            villa_owner = "N/A"
 
         if villaa_price:
             villaa_price = villaa_price.text.strip()
@@ -163,6 +170,7 @@ def scrape_links_from_codes():
             with open("alldata_Alibaba_links.txt", "a", encoding="utf-8") as f:
                 f.write(f"Villa Name: {villaa_name}\n")
                 f.write(f"Villa Price: {villaa_price}\n")
+                f.write(f"Villa Owner is: {villa_owner}\n")
                 f.write("Functionality: \n")
                 for functionality in villa_functionality:
                     f.write(f"{functionality.text.strip()} , ")

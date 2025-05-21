@@ -1,0 +1,9 @@
+bs4
+re
+sqlite3
+pandas
+requests
+json
+selenium
+time 
+scikit-learn

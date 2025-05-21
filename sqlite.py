@@ -1,5 +1,6 @@
 import sqlite3
 import re
+import pandas as pd
 
 
 conn = sqlite3.connect("villa_ads.db")
@@ -83,4 +84,26 @@ for match in matches:
 conn.commit()
 conn.close()
 
-print("done")
+# print("done")
+
+ads_df = pd.read_sql("SELECT * FROM ads", conn)
+similar_ads_df = pd.read_sql("SELECT * FROM similar_ads", conn)
+
+
+ads_df.to_csv('ads_pandas.csv', index=False)
+similar_ads_df.to_csv('similar_ads_pandas.csv', index=False)
+
+merged = pd.merge(
+    similar_ads_df,
+    ads_df.add_prefix('ad1_'),
+    left_on='ad1_id',
+    right_on='ad1_ad_id'
+).merge(
+    ads_df.add_prefix('ad2_'),
+    left_on='ad2_id',
+    right_on='ad2_ad_id'
+)
+
+merged[['similarity', 'ad1_name', 'ad1_price', 'ad1_url', 'ad2_name', 'ad2_price', 'ad2_url']]\
+    .sort_values('similarity', ascending=False)\
+    .to_csv('merged_report.csv', index=False)

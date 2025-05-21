@@ -1,5 +1,6 @@
 import sqlite3
 import re
+import pandas as pd
 
 
 conn = sqlite3.connect("villa_ads.db")
@@ -63,7 +64,7 @@ def insert_ad(ad, source):
     ''', (source, ad["name"], ad["price"], ad["owner"], ad["description"], ad["features"], ad["url"]))
     return cursor.lastrowid
 
-with open("similarity.txt", "r", encoding="utf-8") as file:
+with open(r"F:\AP4032\seyed\similarity.txt", "r", encoding="utf-8") as file:
     content = file.read()
 
 matches = re.split(r"=+\n", content)
@@ -81,6 +82,31 @@ for match in matches:
             ''', (ad1_id, ad2_id, similarity))
 
 conn.commit()
-conn.close()
 
-print("done")
+
+# print("done")
+
+ads_df = pd.read_sql("SELECT * FROM ads", conn)
+similar_ads_df = pd.read_sql("SELECT * FROM similar_ads", conn)
+
+
+ads_df.to_csv('ads_pandas.csv', index=False)
+similar_ads_df.to_csv('similar_ads_pandas.csv', index=False)
+
+
+merged = pd.merge(
+    similar_ads_df,
+    ads_df.add_prefix('ad1_'),
+    left_on='ad1_id',
+    right_on='ad1_ad_id'
+).merge(
+    ads_df.add_prefix('ad2_'),
+    left_on='ad2_id',
+    right_on='ad2_ad_id'
+)
+
+merged[['similarity', 'ad1_name', 'ad1_price', 'ad1_url', 'ad2_name', 'ad2_price', 'ad2_url']]\
+    .sort_values('similarity', ascending=False)\
+    .to_csv('merged_report.csv', index=False)
+
+conn.close()

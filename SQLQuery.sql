@@ -99,4 +99,4 @@ CROSS APPLY (
         ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) AS ad_idx,
         N.query('.') AS x
 ) AS ad_data;
-
+SELECT * FROM similar_ads ORDER BY similarity DESC;
